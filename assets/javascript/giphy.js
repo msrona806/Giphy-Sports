@@ -6,26 +6,43 @@ $(document).ready(function() {
 // variable to hold array of topics
 var topics = ["Orlando", "Las Vegas", "San Francisco"];
 console.log(topics)
-// Function that will display location gifs
+
+// Function that holding location gifs
 function locationDisplay () {
 
-  // the location buttons will need to be remove before a new button is added, to avoid repetitive buttons
-  $("#results").empty();
+  var topic = $(this).attr("locations");
+  var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=CO5Bdmd3pzct7qe3fGGS3tdGFF1biYxa";
 
-  // for loop to go thru topics array
-  for (var i = 0; i < topics.length; i++) {
+  // AJAX GET request
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }) .done(function(response) {
+    $("#location-view").text(JSON.stringify(response));
+    renderLocation();
+  });
+}
+  
+  // function to display gifs
+  function renderLocation() {
 
-  // create buttons from items from the topic array, use a for loop to append topics to button
-  // generate buttons dynamically for each location
-  var a = $("<button>");
-  // create a class and add attribute for the value of the topics array
-  a.addClass("topic");  
-  // add the value entered to the topic array
-  a.attr("locations", topics[i]);
-  // make the word entered show up on the button
-  a.text(topics[i]);
-  // create a new button in the HTML
-  $("#results").append(a);
+    // the location buttons will need to be remove before a new button is added, to avoid repetitive buttons
+    $("#results").empty();
+
+    // for loop to go thru topics array
+    for (var i = 0; i < topics.length; i++) {
+
+    // create buttons from items from the topic array, use a for loop to append topics to button
+    // generate buttons dynamically for each location
+    var a = $("<button>");
+    // create a class and add attribute for the value of the topics array
+    a.addClass("topic");  
+    // add the value entered to the topic array
+    a.attr("locations", topics[i]);
+    // make the word entered show up on the button
+    a.text(topics[i]);
+    // create a new button in the HTML
+    $("#results").append(a);
   }
 }
 
@@ -45,9 +62,10 @@ topics.push(topic);
 locationDisplay();
 });
 
-// call locationDisplay function to display initial list of locations
-locationDisplay();
+$(document).click(".topic", locationDisplay);
 
+// call locationDisplay function to display initial list of locations
+// locationDisplay();
 });
 
 // on click function to get information from GIPHY (10 gifs). Display in html, not animated
