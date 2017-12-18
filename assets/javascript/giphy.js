@@ -9,10 +9,28 @@ $(document).ready(function() {
 
   // Function to request giphy images to display when any location button is clicked
   function displayLocationGif () {
-    
-  }
+
+    //event listener for all of the location buttons
+    $("button").click(function() {
+      
+      // var travelLocation = $(this).attr("location-gif");
+
+      // AJAX details 
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topics + "&api_key=CO5Bdmd3pzct7qe3fGGS3tdGFF1biYxa&limit=1";
+     
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }) 
+      // date returned from giphy search
+      .done(function(response){
+        console.log(response);
+        $("location-view").text(JSON.stringify(response));
+      })
+    });
+
   // Function that will display location buttons
-  function locationDisplay () {
+  
   
     // the location buttons will need to be remove before a new button is added, to avoid repetitive buttons
     $("#results").empty();
@@ -32,7 +50,7 @@ $(document).ready(function() {
     // create a new button in the HTML
     $("#results").append(a);
     }
-  }
+  
   
   // on click event for the travel here button
   $("#add-location").click(function(event) {
@@ -54,3 +72,7 @@ $(document).ready(function() {
   locationDisplay();
   
   });
+
+  // img tag for gifs to display
+  // code for the gifs to animate
+  
